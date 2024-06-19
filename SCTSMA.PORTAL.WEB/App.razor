@@ -1,0 +1,29 @@
+﻿<CascadingAuthenticationState>
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <AuthorizeView>
+            <Authorized>
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Authorized>
+             <NotAuthorized>
+                <SCTSMA.PORTAL.SERVICES.LoginRedirect></SCTSMA.PORTAL.SERVICES.LoginRedirect>
+            </NotAuthorized>
+        </AuthorizeView>
+    </Found>
+
+    <NotFound>
+        <AuthorizeView>
+            <Authorized>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+            </Authorized>
+            <NotAuthorized>
+                    <SCTSMA.PORTAL.SERVICES.LoginRedirect></SCTSMA.PORTAL.SERVICES.LoginRedirect>
+            </NotAuthorized>
+        </AuthorizeView>
+    </NotFound>
+</Router>
+</CascadingAuthenticationState>

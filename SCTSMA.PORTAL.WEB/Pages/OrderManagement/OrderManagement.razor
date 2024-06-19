@@ -1,0 +1,65 @@
+﻿@page "/ordermanagement"
+@inherits SCTSMA.PORTAL.SERVICES.OrderManagement.OrderManagementBase
+
+<div class="pagetitle">
+    <h1>Order Management</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Order</a></li>
+            <li class="breadcrumb-item">Management</li>
+            <li class="breadcrumb-item active">Order Management</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Orders</h5>
+                    <p>List of all orders</p>
+
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add_order">Add Order</button>
+                        </div>
+                    </div>
+
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Order ID
+                                </th>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Order Status</th>
+                                <th>Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var Order in Orders)
+                            {
+                                <tr>
+                                    <td>@Order.OrderID</td>
+                                    <td>@Order.ProductName</td>
+                                    <td>@Order.Quantity</td>
+                                    <td>@Order.OrderStatus</td>
+                                    <td>@Order.PaymentStatus</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.AddOrderModal/>
