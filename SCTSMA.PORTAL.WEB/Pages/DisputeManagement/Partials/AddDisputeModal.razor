@@ -1,0 +1,84 @@
+﻿<!-- Add Dsipute Modal -->
+<div id="add_dispute" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Dispute</h5>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="disputePost">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Id <span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="disputePost.order" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" @bind="disputePost.description"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Status code<span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="disputePost.status" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Dispute Image <span class="text-danger">*</span></label>
+                                <InputFile accept="image/*" class="form-control" OnChange="HandleFileSelected" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2" style="display:flex; justify-content:center; align-items:center;">
+                        <button data-bs-dismiss="modal" class="btn btn-outline-danger" @onclick="OnClose">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="margin-left:2rem" @onclick="OnSave" disabled="@isAddDisputeLoading">
+                            @if (isAddDisputeLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            }
+                            else
+                            {
+                                <span>Submit</span>
+                            }
+                        </button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(addDisputeErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-2">
+                            @addDisputeErrorMessage
+                        </div>
+                    }
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code
+{
+    @using SCTSMA.PORTAL.DOMAIN.Dispute
+    [Parameter] public CreateDisputeRequestModel disputePost { get; set; }
+    [Parameter] public bool isAddDisputeLoading { get; set; }
+    [Parameter] public string addDisputeErrorMessage { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnSave { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnClose { get; set; }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+            disputePost.image = buffer;
+        }
+    }
+}
+

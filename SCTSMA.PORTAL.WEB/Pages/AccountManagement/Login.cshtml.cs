@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using SCTSMA.PORTAL.DOMAIN.User;
+using SCTSMA.PORTAL.APPLICATION;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SCTSMA.PORTAL.WEB.Pages.AccountManagement
 {
@@ -12,10 +14,13 @@ namespace SCTSMA.PORTAL.WEB.Pages.AccountManagement
         public bool isLoading { get; set; } = false;
         public string errorMessage { get; set; } = string.Empty;
         [BindProperty]
-        public UserModel? userPost { get; set; } = new UserModel();
+        //public CreateUserModel? userPost { get; set; } = new CreateUserModel();
+        public LoginRequestModel? userPost { get; set; } = new LoginRequestModel();
+        private readonly IUserRepository _userRepository;
 
-        public void OnGet()
+        public LoginModel(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> OnPostLoginUserAsync()
@@ -24,40 +29,65 @@ namespace SCTSMA.PORTAL.WEB.Pages.AccountManagement
             {
                 return Page();
             }
-
-            isLoading = true;
-            if (userPost.Username!.Equals("fchilo@gmail.com") && userPost.Password!.Equals("2025"))
+            try
             {
-                var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userPost.Username),
-                new Claim("FullName", "Faith Chilo"),
-                new Claim(ClaimTypes.Role, "Administrator"),
-            };
+                isLoading = true;
+                LoginResponseModel loginResponse = await _userRepository.LoginUser(userPost);
 
-                var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
+                if (loginResponse.access != null && loginResponse.refresh != null)
                 {
+                    var handler = new JwtSecurityTokenHandler();
 
-                };
+                    var accessToken = handler.ReadJwtToken(loginResponse.access);
+                    var refreshToken = handler.ReadJwtToken(loginResponse.refresh);
 
-                await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+                    var userId = accessToken.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
 
-                isLoading = false;
-                return Redirect("~/");
+                    if (string.IsNullOrEmpty(userId))
+                    {
+                        throw new Exception("User ID not found in the access token");
+                    }
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, userPost.username),
+                        new Claim("userid", userId),
+                        new Claim("access_token", loginResponse.access),
+                        new Claim("refresh_token", loginResponse.refresh)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(12)
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    isLoading = false;
+                    return Redirect("~/");
+                }
+                else
+                {
+                    errorMessage = "Please fill in the correct details";
+                    isLoading = false;
+                    return Page();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                errorMessage = "Please fill in the correct details";
-                isLoading = false;
+                errorMessage = $"An error occurred: {ex.Message}";
                 return Page();
             }
-            //return Redirect("~/dashboard");
-
+            finally
+            {
+                isLoading = false;
+            }
         }
+
     }
 }

@@ -1,0 +1,92 @@
+﻿@page "/disputemanagement"
+@using SCTSMA.PORTAL.CONFIG
+@inherits SCTSMA.PORTAL.SERVICES.DisputeManagement.DisputeManagementBase
+
+<div class="pagetitle">
+    <h2>Dispute Management</h2>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Dispute</a></li>
+            <li class="breadcrumb-item">Management</li>
+            <li class="breadcrumb-item active">Dispute Management</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    @if (isLoading)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border" role="status">
+                @* <span class="sr-only">Loading...</span> *@
+            </div>
+            <p class="mt-2">Loading Disputes...</p>
+        </div>
+    }
+    else if (errorMessage != null && errorMessage != string.Empty)
+    {
+        <div class="error-container">
+            <div class="error-message">
+                <p>@errorMessage</p>
+            </div>
+            <button class="refresh-button" onclick="location.reload()">Refresh</button>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Orders</h5>
+                        <p>List of all disputes</p>
+
+                        <div class="row">
+                            <div class="col-lg-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add_dispute">Add Dispute</button>
+                            </div>
+                        </div>
+
+                        <!-- Table with stripped rows -->
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Dispute ID
+                                    </th>
+                                    <th>Description</th>
+                                    <th>Order Number</th>
+                                    <th>Created At</th>
+                                    @* <th>Image</th> *@
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dispute in Disputes)
+                                {
+                                    <tr>
+                                        <td>@dispute.id</td>
+                                        <td>@dispute.description</td>
+                                        <td>@dispute.order</td>
+                                        <td>@dispute.created!.Value.ToShortDateString()</td>
+                                        @* <td>
+                                            <img id="imagePreview" src="@($"{Names.BaseURL}{dispute.image}")" alt="Image Preview" style="max-width: 100%; max-height: 100px;">
+                                        </td> *@
+                                        <td>Active</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    }
+</section>
+
+<SCTSMA.PORTAL.WEB.Pages.DisputeManagement.Partials.AddDisputeModal disputePost="@disputePost" isAddDisputeLoading="@isAddDisputeLoading" addDisputeErrorMessage="@addDisputeErrorMessage" OnClose="@OnClose" OnSave="@AddDispute"/>

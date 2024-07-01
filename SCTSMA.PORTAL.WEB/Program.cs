@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using SCTSMA.PORTAL.APPLICATION;
+using SCTSMA.PORTAL.INFRASTRUCTURE;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +18,7 @@ builder.Services.AddRazorPages(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        //options.ExpireTimeSpan = TimeSpan.FromSeconds(3);
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.ExpireTimeSpan = TimeSpan.FromHours(12);
         options.SlidingExpiration = false;
         options.AccessDeniedPath = "/error";
     });
@@ -27,6 +26,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddHttpClient<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddHttpClient<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddHttpClient<IDisputeRepository, DisputeRepository>();
+builder.Services.AddScoped<IDisputeRepository, DisputeRepository>();
+
+builder.Services.AddAuthenticationCore();
 
 var app = builder.Build();
 
@@ -48,9 +58,10 @@ var cookiePolicyOptions = new CookiePolicyOptions
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCookiePolicy(cookiePolicyOptions);
-app.UseRouting();
 
+app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+app.MapRazorPages();
 
 app.Run();

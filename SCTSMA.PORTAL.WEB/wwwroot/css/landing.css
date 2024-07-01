@@ -1,0 +1,31 @@
+﻿html, body {
+    height: 100%;
+}
+
+main {
+    background: #f8f9fa;
+    padding: 3rem 1rem;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

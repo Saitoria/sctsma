@@ -2,7 +2,7 @@
 @inherits SCTSMA.PORTAL.SERVICES.OrderManagement.OrderManagementBase
 
 <div class="pagetitle">
-    <h1>Order Management</h1>
+    <h2>Order Management</h2>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Order</a></li>
@@ -13,6 +13,26 @@
 </div><!-- End Page Title -->
 
 <section class="section">
+    @if (isLoading)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border" role="status">
+                @* <span class="sr-only">Loading...</span> *@
+            </div>
+            <p class="mt-2">Loading Orders...</p>
+        </div>
+    }
+    else if (errorMessage != null && errorMessage != string.Empty)
+    {
+        <div class="error-container">
+            <div class="error-message">
+                <p>@errorMessage</p>
+            </div>
+            <button class="refresh-button" onclick="location.reload()">Refresh</button>
+        </div>
+    }
+    else
+    {
     <div class="row">
         <div class="col-lg-12">
 
@@ -34,21 +54,33 @@
                                 <th>
                                     Order ID
                                 </th>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Order Status</th>
+                                <th>Order Name</th>
+                                <th>Description</th>
+                                <th>Total price</th>
                                 <th>Payment Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach(var Order in Orders)
                             {
                                 <tr>
-                                    <td>@Order.OrderID</td>
-                                    <td>@Order.ProductName</td>
-                                    <td>@Order.Quantity</td>
-                                    <td>@Order.OrderStatus</td>
-                                    <td>@Order.PaymentStatus</td>
+                                    <td>@Order.id</td>
+                                    <td>@Order.name</td>
+                                    <td>@Order.description</td>
+                                    <td>@Order.tot_price</td>
+                                    <td>
+                                        @if(Order.is_paid!.Value)
+                                        {
+                                            <p>Paid</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Not paid</p>
+                                        }
+                                    </td>
+                                    <td>@Order.created!.Value.ToShortDateString()</td>
                                 </tr>
                             }
                         </tbody>
@@ -56,10 +88,12 @@
                     <!-- End Table with stripped rows -->
 
                 </div>
+
             </div>
 
         </div>
     </div>
+    }
 </section>
 
-<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.AddOrderModal/>
+<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.AddOrderModal orderPost="@orderPost" isAddOrderLoading="@isAddOrderLoading" addOrderErrorMessage="@addOrderErrorMessage" OnSave="@AddOrder" OnClose="@OnClose"/>
