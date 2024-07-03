@@ -1,0 +1,45 @@
+﻿<!-- Delete Dispute Modal -->
+<div id="delete_dispute" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Dispute</h5>
+            </div>
+            <div class="modal-body">
+                    <div class="mt-2" style="display:flex; justify-content:center; align-items:center;">
+                        <button data-bs-dismiss="modal" class="btn btn-outline-danger" @onclick="OnClose">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="margin-left:2rem" @onclick="OnSave" disabled="@isDeleteDisputeLoading">
+                            @if (isDeleteDisputeLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            }
+                            else
+                            {
+                                <span>Delete</span>
+                            }
+                        </button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(deleteDisputeErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-2">
+                            @deleteDisputeErrorMessage
+                        </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code
+{
+    @using SCTSMA.PORTAL.DOMAIN.Dispute
+    [Parameter] public CreateDisputeRequestModel disputePost { get; set; }
+    [Parameter] public bool isDeleteDisputeLoading { get; set; }
+    [Parameter] public string deleteDisputeErrorMessage { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnSave { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnClose { get; set; }
+}
+

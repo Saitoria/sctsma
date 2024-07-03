@@ -7,5 +7,6 @@ namespace SCTSMA.PORTAL.APPLICATION
         Task<List<GetDisputesResponseModel>> GetAllDisputes();
         Task<CreateDisputeResponseModel> CreateDispute(CreateDisputeRequestModel disputePost);
         Task<CreateDisputeResponseModel> UpdateDispute(CreateDisputeRequestModel disputePost, int disputeId);
+        Task<bool> DeleteDispute(int disputeId);
     }
 }

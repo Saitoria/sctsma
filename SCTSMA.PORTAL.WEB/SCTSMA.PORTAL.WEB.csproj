@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\OrderManagement\Partials\ViewOrderModal.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
@@ -17,6 +21,18 @@
     <ProjectReference Include="..\SCTSMA.PORTAL.DOMAIN\SCTSMA.PORTAL.DOMAIN.csproj" />
     <ProjectReference Include="..\SCTSMA.PORTAL.INFRASTRUCTURE\SCTSMA.PORTAL.INFRASTRUCTURE.csproj" />
     <ProjectReference Include="..\SCTSMA.PORTAL.SERVICES\SCTSMA.PORTAL.SERVICES.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\OrderManagement\Partials\ViewOrderModal.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\OrderManagement\Partials\ViewOrderModal.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\OrderManagement\Partials\ViewOrderModal.razor" />
   </ItemGroup>
 
 </Project>
