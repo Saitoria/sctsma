@@ -1,4 +1,4 @@
-﻿namespace SCTSMA.PORTAL.DOMAIN.User
+﻿namespace SCTSMA.PORTAL.DOMAIN.User.LoginUser
 {
     public class LoginResponseModel
     {

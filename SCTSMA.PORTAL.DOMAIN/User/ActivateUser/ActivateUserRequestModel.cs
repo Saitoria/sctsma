@@ -1,4 +1,4 @@
-﻿namespace SCTSMA.PORTAL.DOMAIN.User
+﻿namespace SCTSMA.PORTAL.DOMAIN.User.ActivateUser
 {
     public class ActivateUserRequestModel
     {

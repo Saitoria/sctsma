@@ -1,4 +1,4 @@
-﻿namespace SCTSMA.PORTAL.DOMAIN.User
+﻿namespace SCTSMA.PORTAL.DOMAIN.User.ListUser
 {
     public class GetUserModel
     {
@@ -7,7 +7,7 @@
         public string email { get; set; }
         public bool is_active { get; set; }
         public DateTime date_joined { get; set; }
-        public Profile profile { get; set; }
+        public UserProfileModel profile { get; set; }
     }
 
 }

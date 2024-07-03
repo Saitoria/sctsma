@@ -1,5 +1,7 @@
 ﻿@page "/usersignup"
 @model SCTSMA.PORTAL.WEB.Pages.AccountManagement.UserSignupModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,41 +57,37 @@
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" asp-page-handler="SignupUser">
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
+                      <label for="yourName" class="form-label">Phone Number (0774...)</label>
+                      <input type="text" class="form-control" id="yourName" name="userPost.Username" asp-for="userPost.username" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
+                      <input type="email" class="form-control" id="yourEmail" name="userPost.email" asp-for="userPost.email"required>
                       <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
+                      <label for="yourEmail" class="form-label">First name</label>
+                      <input type="text" class="form-control" id="yourEmail" name="userPost.first_name" asp-for="userPost.first_name"required>
+                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Last name</label>
+                      <input type="text" class="form-control" id="yourEmail" name="userPost.last_name" asp-for="userPost.last_name" required>
+                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <input type="password" name="password" class="form-control" id="yourPassword" name="userPost.password" asp-for="userPost.password" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-                    </div>
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Create Account</button>
                     </div>
@@ -97,7 +95,19 @@
                       <p class="small mb-0">Already have an account? <a href="/login">Log in</a></p>
                     </div>
                   </form>
-
+                  @if (Model.errorMessage != null && Model.errorMessage != string.Empty)
+                    {
+                        <div style="background-color: #ff0000; color: #ffffff; border-color: #721c24; padding: 15px; margin-top: 10px; border-radius: 5px; text-align: center;">
+                            <span>@Model.errorMessage</span>
+                        </div>
+                    }
+                @if (Model.otpValue != null && Model.otpValue != string.Empty)
+                    {
+                        <div style="background-color: #a4e9b8; color: #000000; border-color: #721c24; padding: 15px; margin-top: 10px; border-radius: 5px; text-align: center;">
+                            <span>Otp Value: @Model.otpValue</span>
+                            <p class="small mb-0" ><a href="/activateuser" >Activate account</a></p>
+                        </div>
+                    }
                 </div>
               </div>
 

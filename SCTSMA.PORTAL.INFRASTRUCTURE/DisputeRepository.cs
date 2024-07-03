@@ -77,5 +77,10 @@ namespace SCTSMA.PORTAL.INFRASTRUCTURE
             }
             return getResponse ?? new List<GetDisputesResponseModel>();
         }
+
+        public async Task<CreateDisputeResponseModel> UpdateDispute(CreateDisputeRequestModel disputePost, int disputeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

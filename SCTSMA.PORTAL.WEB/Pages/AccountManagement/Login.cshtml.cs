@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
-using SCTSMA.PORTAL.DOMAIN.User;
 using SCTSMA.PORTAL.APPLICATION;
 using System.IdentityModel.Tokens.Jwt;
+using SCTSMA.PORTAL.DOMAIN.User.LoginUser;
 
 namespace SCTSMA.PORTAL.WEB.Pages.AccountManagement
 {

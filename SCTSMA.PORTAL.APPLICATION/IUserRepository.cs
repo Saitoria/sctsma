@@ -1,4 +1,7 @@
-﻿using SCTSMA.PORTAL.DOMAIN.User;
+﻿using SCTSMA.PORTAL.DOMAIN.User.ActivateUser;
+using SCTSMA.PORTAL.DOMAIN.User.CreateUser;
+using SCTSMA.PORTAL.DOMAIN.User.ListUser;
+using SCTSMA.PORTAL.DOMAIN.User.LoginUser;
 
 namespace SCTSMA.PORTAL.APPLICATION
 {
@@ -6,6 +9,7 @@ namespace SCTSMA.PORTAL.APPLICATION
     {
         Task<LoginResponseModel> LoginUser(LoginRequestModel loginRequest);
         Task<ActivateUserResponseModel> ActivateUser(ActivateUserRequestModel activateUserRequest);
-        Task<GetUserModel> GetUser();
+        Task<List<ListUserResponseModel>> GetAllUsers();
+        Task<CreateUserResponseModel> CreateUser(CreateUserRequestModel createUserRequest);
     }
 }

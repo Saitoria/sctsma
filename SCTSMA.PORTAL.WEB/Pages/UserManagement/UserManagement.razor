@@ -1,0 +1,93 @@
+﻿@page "/usermanagement"
+@inherits SCTSMA.PORTAL.SERVICES.UserManagement.UserManagementBase
+
+<div class="pagetitle">
+    <h2>User Management</h2>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item">Management</li>
+            <li class="breadcrumb-item active">User Management</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    @if (isLoading)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border" role="status">
+                @* <span class="sr-only">Loading...</span> *@
+            </div>
+            <p class="mt-2">Loading Users...</p>
+        </div>
+    }
+    else if (errorMessage != null && errorMessage != string.Empty)
+    {
+        <div class="error-container">
+            <div class="error-message">
+                <p>@errorMessage</p>
+            </div>
+            <button class="refresh-button" onclick="location.reload()">Refresh</button>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Users</h5>
+                        <p>List of all users</p>
+
+                        <!-- Table with stripped rows -->
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        User ID
+                                    </th>
+                                    <th>First name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Is Active?</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Users)
+                                {
+                                    <tr>
+                                        <td>@user.id</td>
+                                        <td>@user.first_name</td>
+                                        <td>@user.username</td>
+                                        <td>@user.email</td>
+                                        <td>
+                                            @if (user.is_active)
+                                            {
+                                                <p>Active</p>
+                                            }
+                                            else
+                                            {
+                                                <p>Not active</p>
+                                            }
+                                        </td>
+                                        <td>@user.date_joined.ToShortDateString()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    }
+</section>
+
+
