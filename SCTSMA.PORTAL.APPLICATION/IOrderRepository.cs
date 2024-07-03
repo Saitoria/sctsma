@@ -6,5 +6,7 @@ namespace SCTSMA.PORTAL.APPLICATION
     {
         Task<List<OrderResponseModel>> GetAllOrders();
         Task<OrderResponseModel> CreateOrder(OrderRequestModel order, string token);
+        Task<OrderResponseModel> UpdateOrder(OrderRequestModel order, string token, int orderId);
+        Task<bool> DeleteOrder(int orderId);
     }
 }

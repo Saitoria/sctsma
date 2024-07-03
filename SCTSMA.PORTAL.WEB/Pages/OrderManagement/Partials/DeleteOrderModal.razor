@@ -1,5 +1,44 @@
-﻿<h3>DeleteOrderModal</h3>
+﻿<!-- Delete Dispute Modal -->
+<div id="delete_order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Order</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2" style="display:flex; justify-content:center; align-items:center;">
+                    <button data-bs-dismiss="modal" class="btn btn-outline-danger" @onclick="OnClose">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="margin-left:2rem" @onclick="OnSave" disabled="@isDeleteOrderLoading">
+                        @if (isDeleteOrderLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>Loading...</span>
+                        }
+                        else
+                        {
+                            <span>Delete</span>
+                        }
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(deleteOrderErrorMessage))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @deleteOrderErrorMessage
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
-@code {
 
+
+@code
+{
+    @using SCTSMA.PORTAL.DOMAIN.Order
+    [Parameter] public OrderRequestModel orderPost { get; set; }
+    [Parameter] public bool isDeleteOrderLoading { get; set; }
+    [Parameter] public string deleteOrderErrorMessage { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnSave { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnClose { get; set; }
 }

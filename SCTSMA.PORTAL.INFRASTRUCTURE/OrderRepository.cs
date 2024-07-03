@@ -51,10 +51,10 @@ namespace SCTSMA.PORTAL.INFRASTRUCTURE
             {
                 var content = new MultipartFormDataContent();
                 content.Add(new StringContent(order.name), "name");
-                content.Add(new StringContent(order.status), "status");
+                //content.Add(new StringContent(order.status), "status");
                 content.Add(new StringContent(order.description), "description");
                 content.Add(new StringContent(order.tot_price.ToString()), "tot_price");
-                content.Add(new StringContent(order.order_number.ToString()), "order_number");
+                //content.Add(new StringContent(order.order_number.ToString()), "order_number");
                 content.Add(new StringContent(order.address), "address");
                 content.Add(new StringContent(order.buyer.ToString()), "buyer");
                 content.Add(new StringContent(order.seller.ToString()), "seller");
@@ -108,5 +108,69 @@ namespace SCTSMA.PORTAL.INFRASTRUCTURE
             return createdOrder ?? new OrderResponseModel();
         }
 
+        public async Task<bool> DeleteOrder(int orderId)
+        {
+            bool deleteResponse = false;
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{Names.BaseURL}/order/{orderId}/delete/");
+                if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                {
+                    // If the response status code is 204 No Content, it means the deletion was successful
+                    deleteResponse = true;
+                }
+                else
+                {
+                    // If the status code is not successful, log or handle the error appropriately
+                    deleteResponse = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                deleteResponse = false;
+            }
+            return deleteResponse;
+        }
+
+        public async Task<OrderResponseModel> UpdateOrder(OrderRequestModel order, string token, int orderId)
+        {
+            OrderResponseModel? createdOrder = null;
+            try
+            {
+                var content = new MultipartFormDataContent();
+                content.Add(new StringContent(order.name), "name");
+                content.Add(new StringContent(order.status), "status");
+                content.Add(new StringContent(order.description), "description");
+                content.Add(new StringContent(order.tot_price.ToString()), "tot_price");
+                content.Add(new StringContent(order.order_number.ToString()), "order_number");
+                content.Add(new StringContent(order.address), "address");
+                content.Add(new StringContent(order.buyer.ToString()), "buyer");
+                content.Add(new StringContent(order.seller.ToString()), "seller");
+
+                if (order.image != null)
+                {
+                    var imageContent = new ByteArrayContent(order.image);
+                    imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+                    content.Add(imageContent, "image", "image.jpg");
+                }
+
+                var request = new HttpRequestMessage(HttpMethod.Put, $"{Names.BaseURL}/order/update_order/{orderId}/");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    createdOrder = JsonConvert.DeserializeObject<OrderResponseModel>(responseContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception as needed
+            }
+            return createdOrder ?? new OrderResponseModel();
+        }
     }
 }

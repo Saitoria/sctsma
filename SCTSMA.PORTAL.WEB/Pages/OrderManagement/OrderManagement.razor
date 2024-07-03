@@ -82,9 +82,9 @@
                                     </td>
                                     <td>@Order.created!.Value.ToShortDateString()</td>
                                     <td>
-                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#view_dispute">View</button>
-                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_dispute">Delete</button>
-                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#update_dispute">Update</button>
+                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#view_order" @onclick="(()=>GetSingleOrderById(Order.id))">View</button>
+                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_order" @onclick="(()=>GetSingleOrderById(Order.id))">Delete</button>
+                                            <button sytle="margin:1px;" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#update_order" @onclick="(()=>GetSingleOrderById(Order.id))">Update</button>
                                     </td>
                                 </tr>
                             }
@@ -102,3 +102,6 @@
 </section>
 
 <SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.AddOrderModal orderPost="@orderPost" isAddOrderLoading="@isAddOrderLoading" addOrderErrorMessage="@addOrderErrorMessage" OnSave="@AddOrder" OnClose="@OnClose"/>
+<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.ViewOrderModal OnClose="@OnClose" imagePath="@imagePath"/>
+<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.DeleteOrderModal OnClose="@OnClose" OnSave="@DeleteOrder" isDeleteOrderLoading="@isDeleteOrderLoading" deleteOrderErrorMessage="@deleteOrderErrorMessage"/>
+<SCTSMA.PORTAL.WEB.Pages.OrderManagement.Partials.UpdateOrderModal OnClose="@OnClose" OnSave="@UpdateOrder" isUpdateOrderLoading="@isUpdateOrderLoading" updateOrderErrorMessage="@updateOrderErrorMessage" orderPost="@orderPost"/>

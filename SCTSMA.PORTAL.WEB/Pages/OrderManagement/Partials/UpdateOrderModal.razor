@@ -1,5 +1,118 @@
-﻿<h3>UpdateOrderModal</h3>
+﻿<!-- Add Order Modal -->
+<div id="update_order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Order</h5>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="orderPost">
+                    <div class="row">
+                        <div class="col-sm-6" style="display:none;">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Id <span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="orderPost.id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Name <span class="text-danger">*</span></label>
+                                <InputText class="form-control" @bind-Value="orderPost.name" />
+                            </div>
+                        </div>
+                        @* <div class="col-sm-6">
+                        <div class="form-group">
+                        <label class="col-form-label">Order Status Code <span class="text-danger">*</span></label>
+                        <InputText class="form-control" @bind-Value="orderPost.status" />
+                        </div>
+                        </div> *@
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" @bind="orderPost.description"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Total Price (Tshs)<span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="orderPost.tot_price" />
+                            </div>
+                        </div>
+                        @* <div class="col-sm-6">
+                        <div class="form-group">
+                        <label class="col-form-label">Order number code <span class="text-danger">*</span></label>
+                        <InputNumber class="form-control" @bind-Value="orderPost.order_number" />
+                        </div>
+                        </div> *@
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Address <span class="text-danger">*</span></label>
+                                <InputText class="form-control" @bind-Value="orderPost.address" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Buyer Id <span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="orderPost.buyer" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Seller Id <span class="text-danger">*</span></label>
+                                <InputNumber class="form-control" @bind-Value="orderPost.seller" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Product Image <span class="text-danger">*</span></label>
+                                <InputFile accept="image/*" class="form-control" OnChange="HandleFileSelected" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2" style="display:flex; justify-content:center; align-items:center;">
+                        <button data-bs-dismiss="modal" class="btn btn-outline-danger" @onclick="OnClose">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="margin-left:2rem" @onclick="OnSave" disabled="@isUpdateOrderLoading">
+                            @if (isUpdateOrderLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            }
+                            else
+                            {
+                                <span>Submit</span>
+                            }
+                        </button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(updateOrderErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-2">
+                            @updateOrderErrorMessage
+                        </div>
+                    }
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
 
-@code {
 
+@code
+{
+    @using SCTSMA.PORTAL.DOMAIN.Order
+    [Parameter] public OrderRequestModel orderPost { get; set; }
+    [Parameter] public bool isUpdateOrderLoading { get; set; }
+    [Parameter] public string updateOrderErrorMessage { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnSave { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnClose { get; set; }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+            orderPost.image = buffer;
+        }
+    }
 }

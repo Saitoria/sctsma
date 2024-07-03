@@ -7,7 +7,7 @@
         public string? name { get; set; }
         public string? description { get; set; }
         public int? tot_price { get; set; }
-        public int? order_number { get; set; }
+        public string? order_number { get; set; }
         public string? address { get; set; }
         //public bool? is_paid { get; set; }
         public byte[] image { get; set; }
